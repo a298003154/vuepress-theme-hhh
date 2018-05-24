@@ -7,8 +7,7 @@
 <script>
 import { pathToComponentName } from "@app/util";
 
-import Markdown from "../../../node_modules/markdown-it";
-
+import Markdown from 'markdown-it'
 const md = new Markdown();
 
 export default {
