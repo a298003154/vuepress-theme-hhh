@@ -1,0 +1,282 @@
+@require './config'
+@require './nprogress'
+@require './code'
+@require './custom-blocks'
+@require './arrow'
+
+
+*
+  box-sizing border-box
+
+html, body
+  padding 0
+  margin 0
+
+body
+  font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  font-size 16px
+  color $textColor
+  background-color #f5f8f9;
+
+.page
+  // padding-left $sidebarWidth
+
+.navbar
+  position fixed
+  z-index 20
+  top 0
+  left 0
+  right 0
+  height $navbarHeight
+  background-color #fff
+  box-sizing border-box
+  border-bottom 1px solid $borderColor
+
+.sidebar-mask
+  position fixed
+  z-index 9
+  top 0
+  left 0
+  width 100vw
+  height 100vh
+  display none
+
+.sidebar
+  font-size 15px
+  background-color #fff
+  width $sidebarWidth
+  position fixed
+  z-index 10
+  margin 0
+  top $navbarHeight
+  left 0
+  bottom 0
+  box-sizing border-box
+  border-right 1px solid $borderColor
+  overflow-y auto
+
+.content:not(.custom)
+  // max-width $contentWidth
+  // margin 1.25rem auto 0
+  // padding 0 2.5rem 2rem
+  > *:first-child
+    padding-top $navbarHeight
+  > p
+    -webkit-margin-before 0
+    -webkit-padding-before 1em
+    &:first-child
+      padding-top 0
+  a:hover
+    text-decoration underline
+  p.demo
+    padding 1rem 1.5rem
+    border 1px solid #ddd
+    border-radius 4px
+  img
+    max-width 100%
+
+.content.custom
+  padding 0
+  margin 0
+
+a
+  // font-weight 500
+  color $accentColor
+  text-decoration none
+  transition all .2s
+
+p a code
+  font-weight 400
+  color $accentColor
+
+kbd
+  background #eee
+  border solid 0.15rem #ddd
+  border-bottom solid 0.25rem #ddd
+  border-radius 0.15rem
+  padding 0 0.15em
+
+blockquote
+  font-size 1.2rem
+  color #999
+  border-left .25rem solid #dfe2e5
+  margin-left 0
+  margin-right 0
+  padding-left 1rem
+
+ul, ol
+  padding-left 1.2em
+  list-style none
+
+strong
+  font-weight 600
+
+h1, h2, h3, h4, h5, h6
+  -webkit-margin-before 0
+  font-weight 600
+  line-height 1.25
+  .content:not(.custom) > &
+    margin-top (2rem - $navbarHeight)
+    padding-top ($navbarHeight - 1rem)
+    margin-bottom 0
+    &:first-child
+      // margin-top -1.5rem
+      // margin-bottom 1rem
+      + pre, + .custom-block
+        margin-top 2rem
+  &:hover .header-anchor
+    opacity: 1
+
+h1
+  -webkit-padding-before .67em
+  font-size 1.65rem
+
+h2
+  -webkit-padding-before .83em
+  font-size 1.4rem
+  padding-bottom .3rem
+  border-bottom 1px solid $borderColor
+
+h3
+  -webkit-padding-before 1em
+  font-size 1.25rem
+
+h4
+  -webkit-padding-before 1.33em
+
+h5
+  -webkit-padding-before 1.67em
+
+h6
+  -webkit-padding-before 2.33em
+
+a.header-anchor
+  font-size 0.85em
+  float left
+  margin-left -0.87em
+  padding-right 0.23em
+  margin-top 0.125em
+  opacity 0
+  &:hover
+    text-decoration none
+
+code, kbd
+  font-family source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace
+
+p, ul, ol
+  line-height 1.7
+
+hr
+  border 0
+  border-top 1px solid $borderColor
+
+table
+  border-collapse collapse
+  margin 1rem 0
+
+tr
+  border-top 1px solid #dfe2e5
+  &:nth-child(2n)
+    background-color #f6f8fa
+
+th, td
+  border 1px solid #dfe2e5
+  padding .6em 1em
+
+.link
+  color $textColor
+  &:hover
+    color $accentColor
+
+.custom-layout
+  padding-top $navbarHeight
+
+.theme-container
+    margin 0 auto
+    padding 0 20px
+  .main,
+  .profile,
+  .sidebar-right
+    box-sizing border-box
+    display inline-block
+    vertical-align top
+  .main
+    display block
+  .article
+    margin-top 40px
+    background-color #fff
+    &:first-child
+      margin-top 0
+  &.sidebar-open
+    .sidebar-mask
+      display: block
+  &.no-navbar
+    .content:not(.custom)
+      h1, h2, h3, h4, h5, h6
+        margin-top 1.5rem
+        padding-top 0
+
+
+gridsWidth(columns)
+  ($columnWidth + $gutterWidth) * columns
+
+column(x, columns)
+  margin 0 $totalWidth * (($gutterWidth * .5 ) / gridsWidth(columns))
+  width $totalWidth * (((($gutterWidth + $columnWidth) * x) - $gutterWidth) / gridsWidth(columns))
+
+$totalWidth = 100%
+
+@media (min-width: ($MQMobile + 1px))
+  columns = $mainColumn + $sidebarColumn
+  .theme-container
+    .main
+      display inline-block
+      column($mainColumn, columns)
+    .profile,
+    .sidebar-right
+      column($sidebarColumn, columns)
+
+  .theme-container.no-sidebar
+    .sidebar
+      display none
+
+@media (min-width: $MQNarrow)
+  columns = $mainColumn + $sidebarColumn * 2
+  .theme-container
+    .main
+      column($mainColumn, columns)
+    .profile,
+    .sidebar-right
+      column($sidebarColumn, columns)
+
+.outer
+  position relative
+  margin 0 auto
+  padding 0 20px
+  max-width $containerWidth
+  // height 100%
+
+.article-banner
+  width 100%
+  height auto
+
+.navbar,
+.profile,
+.article
+  box-shadow: $boxShadow
+
+
+.slide-fade-enter-active
+  transition all .3s ease
+
+.slide-fade-leave-active
+  transition all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0)
+
+.slide-fade-enter,
+.slide-fade-leave-to
+  transform translateX(10px)
+  opacity 0
+
+@require './mobile.styl'
